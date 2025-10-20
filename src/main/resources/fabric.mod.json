@@ -13,7 +13,7 @@
 	"icon": "assets/barrl/icon.png",
 	"environment": "client",
 	"entrypoints": {
-		"main": [
+		"client": [
 			{
 				"value": "com.github.synnerz.barrl.Barrl",
 				"adapter": "kotlin"
