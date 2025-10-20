@@ -34,6 +34,8 @@ object Render3D {
         ox: Double, oy: Double, oz: Double,
         color: Color, phase: Boolean = false
     ) {
+        if (!ctx.stacksInit) return
+
         val consumers = ctx.consumers
         val matrices = ctx.stacks
         val layer = if (phase) RendererLayers.TRIANGLE_STRIP_ESP else RendererLayers.TRIANGLE_STRIP
@@ -70,6 +72,8 @@ object Render3D {
         phase: Boolean = false,
         translate: Boolean = true
     ) {
+        if (!ctx.stacksInit) return
+
         var cx = x + 0.5
         var cz = z + 0.5
         var cy = y
@@ -117,6 +121,8 @@ object Render3D {
         ox: Double, oy: Double, oz: Double,
         color: Color, phase: Boolean = false
     ) {
+        if (!ctx.stacksInit) return
+
         val consumers = ctx.consumers
         val matrices = ctx.stacks
         val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
@@ -149,6 +155,8 @@ object Render3D {
         phase: Boolean = false,
         translate: Boolean = true
     ) {
+        if (!ctx.stacksInit) return
+
         val cx = x + 0.5
         val cz = z + 0.5
         val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
@@ -196,6 +204,8 @@ object Render3D {
         phase: Boolean = false,
         translate: Boolean = true
     ) {
+        if (!ctx.stacksInit) return
+
         var toScale = scale
         val consumer = minecraft.bufferBuilders.entityVertexConsumers
         val offset = -textRenderer.getWidth(string) / 2f
@@ -275,6 +285,8 @@ object Render3D {
         phase: Boolean = false,
         translate: Boolean = true
     ) {
+        if (!ctx.stacksInit) return
+
         val world = minecraft.world ?: return
         val camPos = ctx.camera.pos
         var dx = 0.0
@@ -322,6 +334,8 @@ object Render3D {
         increase: Boolean = false,
         phase: Boolean = false
     ) {
+        if (!ctx.stacksInit) return
+
         val pos = minecraft.player ?: return
         val dx = x - pos.x
         val dy = y + 5 - pos.y
