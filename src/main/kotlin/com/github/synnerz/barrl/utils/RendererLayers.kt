@@ -8,7 +8,7 @@ import net.minecraft.util.TriState
 // From devonian https://github.com/Synnerz/devonian/blob/main/src/main/kotlin/com/github/synnerz/devonian/utils/render/DPipelines.kt
 object RendererLayers {
     val LINES = RenderLayer.of(
-        "barrly/lines",
+        "barrl/lines",
         1536,
         false,
         true,
@@ -19,7 +19,7 @@ object RendererLayers {
     )
 
     val LINES_ESP = RenderLayer.of(
-        "barrly/lines_esp",
+        "barrl/lines_esp",
         1536,
         false,
         true,
@@ -30,7 +30,7 @@ object RendererLayers {
     )
 
     val TRIANGLE_STRIP = RenderLayer.of(
-        "barrly/triangle_strip",
+        "barrl/triangle_strip",
         1536,
         false,
         true,
@@ -41,7 +41,7 @@ object RendererLayers {
     )
 
     val TRIANGLE_STRIP_ESP = RenderLayer.of(
-        "barrly/triangle_strip_esp",
+        "barrl/triangle_strip_esp",
         1536,
         false,
         true,
@@ -52,7 +52,7 @@ object RendererLayers {
     )
 
     val BEACON_BEAM_OPAQUE = RenderLayer.of(
-        "barrly/beacon_beam_opaque",
+        "barrl/beacon_beam_opaque",
         1536,
         false,
         true,
@@ -64,7 +64,7 @@ object RendererLayers {
     )
 
     val BEACON_BEAM_OPAQUE_ESP = RenderLayer.of(
-        "barrly/beacon_beam_opaque_esp",
+        "barrl/beacon_beam_opaque_esp",
         1536,
         false,
         true,
@@ -76,7 +76,7 @@ object RendererLayers {
     )
 
     val BEACON_BEAM_TRANSLUCENT = RenderLayer.of(
-        "barrly/beacon_beam_translucent",
+        "barrl/beacon_beam_translucent",
         1536,
         false,
         true,
@@ -88,7 +88,7 @@ object RendererLayers {
     )
 
     val BEACON_BEAM_TRANSLUCENT_ESP = RenderLayer.of(
-        "barrly/beacon_beam_translucent_esp",
+        "barrl/beacon_beam_translucent_esp",
         1536,
         false,
         true,
