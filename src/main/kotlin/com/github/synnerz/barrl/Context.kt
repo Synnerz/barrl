@@ -8,11 +8,16 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.shape.VoxelShape
 import java.awt.Color
 
-class Context {
+class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
     lateinit var stacks: MatrixStack
     lateinit var consumers: VertexConsumerProvider
     lateinit var tickCounter: RenderTickCounter
     lateinit var camera: Camera
+
+    internal val stacksInit: Boolean get() {
+        if (!isImmediate) return true
+        return ::stacks.isInitialized
+    }
 
     fun setup(
         consumers: VertexConsumerProvider,

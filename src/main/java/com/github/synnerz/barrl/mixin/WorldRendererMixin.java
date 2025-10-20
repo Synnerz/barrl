@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
     @Shadow @Final private BufferBuilderStorage bufferBuilders;
-    private Context ctx = new Context();
+    private Context ctx = new Context(true);
 
     @Inject(method = "render", at = @At("HEAD"))
     private void preRender(ObjectAllocator allocator, RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
