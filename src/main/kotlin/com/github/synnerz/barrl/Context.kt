@@ -50,6 +50,8 @@ class Context {
      * @param z
      * @param color Color instance
      * @param phase Whether to render through walls or not (`false` = no)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
      */
     @JvmOverloads
     fun renderFilledBox(
@@ -57,8 +59,9 @@ class Context {
         y: Double = 0.0,
         z: Double = 0.0,
         color: Color = Color.WHITE,
-        phase: Boolean = false
-    ) = Render3D.renderFilledBox(this, x, y, z, color, phase)
+        phase: Boolean = false,
+        translate: Boolean = true
+    ) = Render3D.renderFilledBox(this, x, y, z, color, phase, translate)
 
     /**
      * - Renders a box at the given shape
@@ -84,13 +87,16 @@ class Context {
      * @param z
      * @param color Color instance
      * @param phase Whether to render through walls or not (`false` = no)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
      */
     @JvmOverloads
     fun renderBox(
         x: Double, y: Double, z: Double,
         color: Color = Color.WHITE,
-        phase: Boolean = false
-    ) = Render3D.renderBox(this, x, y, z, color, phase)
+        phase: Boolean = false,
+        translate: Boolean = true
+    ) = Render3D.renderBox(this, x, y, z, color, phase, translate)
 
     /**
      * - Renders a string
@@ -103,6 +109,8 @@ class Context {
      * @param backgroundBox Whether to render a background box or not
      * @param increase Whether to increase the size of the String depending on the player position
      * @param phase Whether to render through walls or not (`false` = no)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
      */
     @JvmOverloads
     fun renderString(
@@ -111,8 +119,9 @@ class Context {
         scale: Float = 1f,
         backgroundBox: Boolean = false,
         increase: Boolean = false,
-        phase: Boolean = false
-    ) = Render3D.renderString(this, string, x, y, z, scale, backgroundBox, increase, phase)
+        phase: Boolean = false,
+        translate: Boolean = true
+    ) = Render3D.renderString(this, string, x, y, z, scale, backgroundBox, increase, phase, translate)
 
     /**
      * - Renders a beam
@@ -121,13 +130,16 @@ class Context {
      * @param z
      * @param color Color instance
      * @param phase Whether to render through walls or not (`false` = no)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
      */
     @JvmOverloads
     fun renderBeam(
         x: Double, y: Double, z: Double,
         color: Color = Color.WHITE,
-        phase: Boolean = false
-    ) = Render3D.renderBeam(this, x, y, z, color, phase)
+        phase: Boolean = false,
+        translate: Boolean = true
+    ) = Render3D.renderBeam(this, x, y, z, color, phase, translate)
 
     /**
      * - Renders a waypoint-like

@@ -59,17 +59,22 @@ object Render3D {
      * @param z
      * @param color Color instance
      * @param phase Whether to render through walls or not (`false` = no)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
      */
     @JvmOverloads
     fun renderFilledBox(
         ctx: Context,
         x: Double, y: Double, z: Double,
-        color: Color, phase: Boolean = false
+        color: Color,
+        phase: Boolean = false,
+        translate: Boolean = true
     ) {
         var cx = x + 0.5
         var cz = z + 0.5
         var cy = y
         val layer = if (phase) RendererLayers.TRIANGLE_STRIP_ESP else RendererLayers.TRIANGLE_STRIP
+        val camPos = ctx.camera.pos.negate()
 
         // Add slightly more to the coords if phase is false
         //  since the block will take over it, and it won't render properly (if it's in a block)
@@ -79,6 +84,11 @@ object Render3D {
             cz += 0.003
         }
 
+        if (translate) {
+            ctx.stacks.push()
+            ctx.stacks.translate(camPos.x, camPos.y, camPos.z)
+        }
+
         VertexRendering.drawFilledBox(
             ctx.stacks,
             ctx.consumers.getBuffer(layer),
@@ -86,6 +96,8 @@ object Render3D {
             cx + 0.5, cy + 1 + 0.003, cz + 0.5,
             color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f
         )
+
+        if (translate) ctx.stacks.pop()
     }
 
     /**
@@ -126,16 +138,26 @@ object Render3D {
      * @param z
      * @param color Color instance
      * @param phase Whether to render through walls or not (`false` = no)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
      */
     @JvmOverloads
     fun renderBox(
         ctx: Context,
         x: Double, y: Double, z: Double,
-        color: Color, phase: Boolean = false
+        color: Color,
+        phase: Boolean = false,
+        translate: Boolean = true
     ) {
         val cx = x + 0.5
         val cz = z + 0.5
         val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
+        val camPos = ctx.camera.pos.negate()
+
+        if (translate) {
+            ctx.stacks.push()
+            ctx.stacks.translate(camPos.x, camPos.y, camPos.z)
+        }
 
         VertexRendering.drawBox(
             ctx.stacks,
@@ -144,6 +166,8 @@ object Render3D {
             cx + 0.5, y + 1, cz + 0.5,
             color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f
         )
+
+        if (translate) ctx.stacks.pop()
     }
 
     /**
@@ -158,6 +182,8 @@ object Render3D {
      * @param backgroundBox Whether to render a background box or not
      * @param increase Whether to increase the size of the String depending on the player position
      * @param phase Whether to render through walls or not (`false` = no)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
      */
     @JvmOverloads
     fun renderString(
@@ -167,18 +193,34 @@ object Render3D {
         scale: Float = 1f,
         backgroundBox: Boolean = false,
         increase: Boolean = false,
-        phase: Boolean = false
+        phase: Boolean = false,
+        translate: Boolean = true
     ) {
         var toScale = scale
         val consumer = minecraft.bufferBuilders.entityVertexConsumers
         val offset = -textRenderer.getWidth(string) / 2f
         val textLayer = if (phase) TextRenderer.TextLayerType.SEE_THROUGH else TextRenderer.TextLayerType.NORMAL
+        val camPos = ctx.camera.pos
 
-        toScale *= if (increase) (sqrt(x * x * y * y * z * z) / 120).toFloat() else 0.025f
+        var ox = 0.0
+        var oy = 0.0
+        var oz = 0.0
+
+        if (translate) {
+            ox = camPos.x
+            oy = camPos.y
+            oz = camPos.z
+        }
+
+        val dx = (x - ox).toFloat()
+        val dy = (y - oy).toFloat()
+        val dz = (z - oz).toFloat()
+
+        toScale *= if (increase) sqrt(dx * dx + dy * dy + dz * dz) / 120f else 0.025f
 
         ctx.stacks.push()
         ctx.stacks.peek().positionMatrix
-            .translate(x.toFloat(), y.toFloat(), z.toFloat())
+            .translate(dx, dy, dz)
             .rotate(ctx.camera.rotation)
             .scale(toScale, -toScale, toScale)
 
@@ -222,18 +264,31 @@ object Render3D {
      * @param z
      * @param color Color instance
      * @param phase Whether to render through walls or not (`false` = no)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
      */
     @JvmOverloads
     fun renderBeam(
         ctx: Context,
         x: Double, y: Double, z: Double,
         color: Color,
-        phase: Boolean = false
+        phase: Boolean = false,
+        translate: Boolean = true
     ) {
         val world = minecraft.world ?: return
+        val camPos = ctx.camera.pos
+        var dx = 0.0
+        var dy = 0.0
+        var dz = 0.0
+
+        if (translate) {
+            dx = camPos.x
+            dy = camPos.y
+            dz = camPos.z
+        }
 
         ctx.stacks.push()
-        ctx.stacks.translate(x, y, z)
+        ctx.stacks.translate(x - dx, y - dy, z - dz)
 
         BeaconBeamRenderer.renderBeam(
             ctx.stacks,
