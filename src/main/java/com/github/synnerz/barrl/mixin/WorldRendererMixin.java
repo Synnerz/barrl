@@ -5,6 +5,7 @@ import com.github.synnerz.barrl.events.WorldRenderEvent;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import net.minecraft.client.render.*;
+import net.minecraft.client.render.state.WorldRenderState;
 import net.minecraft.client.util.Handle;
 import net.minecraft.client.util.ObjectAllocator;
 import net.minecraft.client.util.math.MatrixStack;
@@ -24,7 +25,7 @@ public class WorldRendererMixin {
     private Context ctx = new Context(true);
 
     @Inject(method = "render", at = @At("HEAD"))
-    private void preRender(ObjectAllocator allocator, RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, Matrix4f positionMatrix, Matrix4f projectionMatrix, GpuBufferSlice fog, Vector4f fogColor, boolean shouldRenderSky, CallbackInfo ci) {
+    private void preRender(ObjectAllocator allocator, RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, Matrix4f positionMatrix, Matrix4f matrix4f, Matrix4f projectionMatrix, GpuBufferSlice fogBuffer, Vector4f fogColor, boolean renderSky, CallbackInfo ci) {
         // Setup the context variable
         ctx.setup(bufferBuilders.getEntityVertexConsumers(), tickCounter, camera);
         Context.Companion.setImmediate(ctx);
@@ -32,7 +33,7 @@ public class WorldRendererMixin {
     }
 
     @Inject(method = "method_62214", at = @At("RETURN"))
-    private void postRender(GpuBufferSlice gpuBufferSlice, RenderTickCounter renderTickCounter, Camera camera, Profiler profiler, Matrix4f matrix4f, Handle handle, Handle handle2, boolean bl, Frustum frustum, Handle handle3, Handle handle4, CallbackInfo ci) {
+    private void postRender(GpuBufferSlice gpuBufferSlice, WorldRenderState worldRenderState, Profiler profiler, Matrix4f matrix4f, Handle handle, Handle handle2, boolean bl, Frustum frustum, Handle handle3, Handle handle4, CallbackInfo ci) {
         WorldRenderEvent.LAST.invoker().trigger(ctx);
     }
 

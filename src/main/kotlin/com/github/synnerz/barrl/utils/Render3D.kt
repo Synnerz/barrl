@@ -168,7 +168,7 @@ object Render3D {
         }
 
         VertexRendering.drawBox(
-            ctx.stacks,
+            ctx.stacks.peek(),
             ctx.consumers.getBuffer(layer),
             cx - 0.5, y, cz - 0.5,
             cx + 0.5, y + 1, cz + 0.5,
