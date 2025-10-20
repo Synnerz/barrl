@@ -3,7 +3,6 @@ package com.github.synnerz.barrl.utils
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.RenderPhase
 import net.minecraft.client.render.block.entity.BeaconBlockEntityRenderer
-import net.minecraft.util.TriState
 
 // From devonian https://github.com/Synnerz/devonian/blob/main/src/main/kotlin/com/github/synnerz/devonian/utils/render/DPipelines.kt
 object RendererLayers {
