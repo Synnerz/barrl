@@ -59,7 +59,7 @@ object RendererLayers {
         RendererPipelines.BEACON_BEAM_OPAQUE,
         RenderLayer.MultiPhaseParameters
             .builder()
-            .texture(RenderPhase.Texture(BeaconBlockEntityRenderer.BEAM_TEXTURE, TriState.FALSE, false))
+            .texture(RenderPhase.Texture(BeaconBlockEntityRenderer.BEAM_TEXTURE, false))
             .build(false)
     )
 
@@ -71,7 +71,7 @@ object RendererLayers {
         RendererPipelines.BEACON_BEAM_OPAQUE_ESP,
         RenderLayer.MultiPhaseParameters
             .builder()
-            .texture(RenderPhase.Texture(BeaconBlockEntityRenderer.BEAM_TEXTURE, TriState.FALSE, false))
+            .texture(RenderPhase.Texture(BeaconBlockEntityRenderer.BEAM_TEXTURE, false))
             .build(false)
     )
 
@@ -83,7 +83,7 @@ object RendererLayers {
         RendererPipelines.BEACON_BEAM_TRANSLUCENT,
         RenderLayer.MultiPhaseParameters
             .builder()
-            .texture(RenderPhase.Texture(BeaconBlockEntityRenderer.BEAM_TEXTURE, TriState.FALSE, false))
+            .texture(RenderPhase.Texture(BeaconBlockEntityRenderer.BEAM_TEXTURE, false))
             .build(false)
     )
 
@@ -95,7 +95,7 @@ object RendererLayers {
         RendererPipelines.BEACON_BEAM_TRANSLUCENT_ESP,
         RenderLayer.MultiPhaseParameters
             .builder()
-            .texture(RenderPhase.Texture(BeaconBlockEntityRenderer.BEAM_TEXTURE, TriState.FALSE, false))
+            .texture(RenderPhase.Texture(BeaconBlockEntityRenderer.BEAM_TEXTURE, false))
             .build(false)
     )
 }
