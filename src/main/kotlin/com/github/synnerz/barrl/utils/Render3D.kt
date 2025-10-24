@@ -154,11 +154,35 @@ object Render3D {
         color: Color,
         phase: Boolean = false,
         translate: Boolean = true
+    ) = renderBox(ctx, x, y, z, 1.0, 1.0, color, phase, translate)
+
+    /**
+     * - Renders a box that is the size of the specified width/height
+     * @param ctx The Context instance
+     * @param x
+     * @param y
+     * @param z
+     * @param width
+     * @param height
+     * @param color Color instance
+     * @param phase Whether to render through walls or not (`false` = no)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     */
+    @JvmOverloads
+    fun renderBox(
+        ctx: Context,
+        x: Double, y: Double, z: Double,
+        width: Double, height: Double,
+        color: Color,
+        phase: Boolean = false,
+        translate: Boolean = true
     ) {
         if (!ctx.stacksInit) return
 
         val cx = x + 0.5
         val cz = z + 0.5
+        val halfWidth = width / 2
         val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
         val camPos = ctx.camera.pos.negate()
 
@@ -170,8 +194,8 @@ object Render3D {
         VertexRendering.drawBox(
             ctx.stacks,
             ctx.consumers.getBuffer(layer),
-            cx - 0.5, y, cz - 0.5,
-            cx + 0.5, y + 1, cz + 0.5,
+            cx - halfWidth, y, cz - halfWidth,
+            cx + halfWidth, y + height, cz + halfWidth,
             color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f
         )
 

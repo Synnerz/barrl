@@ -104,6 +104,27 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
     ) = Render3D.renderBox(this, x, y, z, color, phase, translate)
 
     /**
+     * - Renders a box that is the size of the specified width/height
+     * @param x
+     * @param y
+     * @param z
+     * @param width
+     * @param height
+     * @param color Color instance
+     * @param phase Whether to render through walls or not (`false` = no)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     */
+    @JvmOverloads
+    fun renderBox(
+        x: Double, y: Double, z: Double,
+        width: Double, height: Double,
+        color: Color,
+        phase: Boolean = false,
+        translate: Boolean = true
+    ) = Render3D.renderBox(this, x, y, z, width, height, color, phase, translate)
+
+    /**
      * - Renders a string
      * - NOTE: currently not supporting `\n` inside of strings but will in the future
      * @param string The string to render
@@ -166,6 +187,7 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
     ) = Render3D.renderWaypoint(this, x, y, z, color, title, increase, phase)
 
     companion object {
+        @JvmStatic
         var Immediate: Context? = null
     }
 }
