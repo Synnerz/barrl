@@ -100,7 +100,6 @@ object Render3D {
         var cx = x + 0.5
         var cz = z + 0.5
         var cy = y
-        val halfWidth = width / 2
         val layer = if (phase) RendererLayers.TRIANGLE_STRIP_ESP else RendererLayers.TRIANGLE_STRIP
         val camPos = ctx.camera.pos.negate()
 
@@ -120,8 +119,8 @@ object Render3D {
         VertexRendering.drawFilledBox(
             ctx.stacks,
             ctx.consumers.getBuffer(layer),
-            cx - halfWidth, cy, cz - halfWidth,
-            cx + halfWidth, cy + height + 0.003, cz + halfWidth,
+            cx, cy, cz,
+            cx + width, cy + height + 0.003, cz + width,
             color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f
         )
 
@@ -204,9 +203,6 @@ object Render3D {
     ) {
         if (!ctx.stacksInit) return
 
-        val cx = x + 0.5
-        val cz = z + 0.5
-        val halfWidth = width / 2
         val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
         val camPos = ctx.camera.pos.negate()
 
@@ -218,8 +214,8 @@ object Render3D {
         VertexRendering.drawBox(
             ctx.stacks,
             ctx.consumers.getBuffer(layer),
-            cx - halfWidth, y, cz - halfWidth,
-            cx + halfWidth, y + height, cz + halfWidth,
+            x, y, z,
+            x + width, y + height, z + width,
             color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f
         )
 
