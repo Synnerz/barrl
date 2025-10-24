@@ -71,12 +71,36 @@ object Render3D {
         color: Color,
         phase: Boolean = false,
         translate: Boolean = true
+    ) = renderFilledBox(ctx,  x, y, z, 1.0, 1.0, color, phase, translate)
+
+    /**
+     * - Renders a filled box that is the size of the specified width/height
+     * @param ctx The Context instance
+     * @param x
+     * @param y
+     * @param z
+     * @param width
+     * @param height
+     * @param color Color instance
+     * @param phase Whether to render through walls or not (`false` = no)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     */
+    @JvmOverloads
+    fun renderFilledBox(
+        ctx: Context,
+        x: Double, y: Double, z: Double,
+        width: Double, height: Double,
+        color: Color,
+        phase: Boolean = false,
+        translate: Boolean = true
     ) {
         if (!ctx.stacksInit) return
 
         var cx = x + 0.5
         var cz = z + 0.5
         var cy = y
+        val halfWidth = width / 2
         val layer = if (phase) RendererLayers.TRIANGLE_STRIP_ESP else RendererLayers.TRIANGLE_STRIP
         val camPos = ctx.camera.pos.negate()
 
@@ -96,8 +120,8 @@ object Render3D {
         VertexRendering.drawFilledBox(
             ctx.stacks,
             ctx.consumers.getBuffer(layer),
-            cx - 0.5, cy, cz - 0.5,
-            cx + 0.5, cy + 1 + 0.003, cz + 0.5,
+            cx - halfWidth, cy, cz - halfWidth,
+            cx + halfWidth, cy + height + 0.003, cz + halfWidth,
             color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f
         )
 
