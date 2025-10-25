@@ -97,8 +97,8 @@ object Render3D {
     ) {
         if (!ctx.stacksInit) return
 
-        var cx = x + 0.5
-        var cz = z + 0.5
+        var cx = x
+        var cz = z
         var cy = y
         val layer = if (phase) RendererLayers.TRIANGLE_STRIP_ESP else RendererLayers.TRIANGLE_STRIP
         val camPos = ctx.camera.pos.negate()
