@@ -3,6 +3,7 @@ package com.github.synnerz.barrl
 import com.github.synnerz.barrl.utils.Render3D
 import net.minecraft.client.render.Camera
 import net.minecraft.client.render.RenderTickCounter
+import net.minecraft.client.render.VertexConsumer
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.shape.VoxelShape
@@ -204,6 +205,21 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
         increase: Boolean = false,
         phase: Boolean = false
     ) = Render3D.renderWaypoint(this, x, y, z, color, title, increase, phase)
+
+    /**
+     * - Adds a new vertex to the current [consumer]
+     * @param consumer The [VertexConsumer] instance
+     * @param x
+     * @Param y
+     * @param z
+     * @param color Color instance
+     */
+    @JvmOverloads
+    fun vert(
+        consumer: VertexConsumer,
+        x: Double, y: Double, z: Double = 0.0,
+        color: Color = Color.WHITE
+    ) = Render3D.vert(consumer, x, y, z, color)
 
     companion object {
         @JvmStatic
