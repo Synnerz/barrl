@@ -4,6 +4,7 @@ import com.github.synnerz.barrl.Context
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.render.LightmapTextureManager
+import net.minecraft.client.render.VertexConsumer
 import net.minecraft.client.render.VertexRendering
 import net.minecraft.util.shape.VoxelShape
 import java.awt.Color
@@ -398,5 +399,18 @@ object Render3D {
             increase = increase,
             phase = phase
         )
+    }
+
+    /**
+     * - Adds a new vertex to the current [consumer]
+     * @param consumer The [VertexConsumer] instance
+     * @param x
+     * @Param y
+     * @param z
+     * @param color Color instance
+     */
+    @JvmOverloads
+    fun vert(consumer: VertexConsumer, x: Double, y: Double, z: Double = 0.0, color: Color = Color.WHITE) {
+        consumer.vertex(x.toFloat(), y.toFloat(), z.toFloat()).color(color.rgb)
     }
 }
