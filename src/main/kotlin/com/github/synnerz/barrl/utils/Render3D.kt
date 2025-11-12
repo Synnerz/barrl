@@ -23,8 +23,8 @@ object Render3D {
      * @param ctx The Context instance
      * @param shape The VoxelShape instance to render
      * @param ox The x offset
-     * @param oy The Y offset
-     * @param oz The Z offset
+     * @param oy The y offset
+     * @param oz The z offset
      * @param color The color
      * @param phase Whether to render through walls or not (`false` = no)
      */
@@ -72,7 +72,7 @@ object Render3D {
         color: Color,
         phase: Boolean = false,
         translate: Boolean = true
-    ) = renderFilledBox(ctx,  x, y, z, 1.0, 1.0, color, phase, translate)
+    ) = renderFilledBox(ctx, x, y, z, 1.0, 1.0, color, phase, translate)
 
     /**
      * - Renders a filled box that is the size of the specified width/height
@@ -133,8 +133,8 @@ object Render3D {
      * @param ctx The Context instance
      * @param shape The VoxelShape instance to render
      * @param ox The x offset
-     * @param oy The Y offset
-     * @param oz The Z offset
+     * @param oy The y offset
+     * @param oz The z offset
      * @param color The color
      * @param phase Whether to render through walls or not (`false` = no)
      */
