@@ -23,8 +23,8 @@ object Render3D {
      * @param ctx The Context instance
      * @param shape The VoxelShape instance to render
      * @param ox The x offset
-     * @param oy The Y offset
-     * @param oz The Z offset
+     * @param oy The y offset
+     * @param oz The z offset
      * @param color The color
      * @param phase Whether to render through walls or not (`false` = no)
      */
@@ -135,8 +135,8 @@ object Render3D {
      * @param ctx The Context instance
      * @param shape The VoxelShape instance to render
      * @param ox The x offset
-     * @param oy The Y offset
-     * @param oz The Z offset
+     * @param oy The y offset
+     * @param oz The z offset
      * @param color The color
      * @param phase Whether to render through walls or not (`false` = no)
      */
