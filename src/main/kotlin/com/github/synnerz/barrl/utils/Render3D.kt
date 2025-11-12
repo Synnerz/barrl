@@ -402,6 +402,40 @@ object Render3D {
     }
 
     /**
+     * - Renders a tracer
+     * @param ctx The [Context] instance
+     * @param x
+     * @param y
+     * @param z
+     * @param color Color instance
+     * @param phase Whether to render through walls or not (`true` = yes)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     */
+    @JvmOverloads
+    fun renderTracer(
+        ctx: Context,
+        x: Double, y: Double, z: Double,
+        color: Color,
+        phase: Boolean = true,
+        translate: Boolean = true
+    ) {
+        if (!ctx.stacksInit) return
+
+        val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
+        val camPos = ctx.camera.pos.negate()
+        val look = ctx.camera.rotation
+
+        val ox = (if (translate) x - camPos.x else x).toFloat()
+        val oy = (if (translate) y - camPos.y else y).toFloat()
+        val oz = (if (translate) z - camPos.z else z).toFloat()
+
+        val consumer = ctx.consumers.getBuffer(layer)
+        consumer.vertex(look.x, look.y, look.z).color(color.red, color.green, color.blue, color.alpha).normal(0f, 1f, 0f)
+        consumer.vertex(ox, oy, oz).color(color.red, color.green, color.blue, color.alpha).normal(0f, 1f, 0f)
+    }
+
+    /**
      * - Adds a new vertex to the current [consumer]
      * @param consumer The [VertexConsumer] instance
      * @param x
