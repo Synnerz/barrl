@@ -101,15 +101,19 @@ object Render3D {
         var cx = x
         var cz = z
         var cy = y
+        var w = width
+        var h = height
         val layer = if (phase) RendererLayers.TRIANGLE_STRIP_ESP else RendererLayers.TRIANGLE_STRIP
         val camPos = ctx.camera.pos.negate()
 
         // Add slightly more to the coords if phase is false
         //  since the block will take over it, and it won't render properly (if it's in a block)
         if (!phase) {
-            cx += 0.003
-            cy += 0.003
-            cz += 0.003
+            cx -= 0.003
+            cy -= 0.003
+            cz -= 0.003
+            w += 0.006
+            h += 0.006
         }
 
         if (translate) {
@@ -121,7 +125,7 @@ object Render3D {
             ctx.stacks,
             ctx.consumers.getBuffer(layer),
             cx, cy, cz,
-            cx + width, cy + height + 0.003, cz + width,
+            cx + w, cy + h, cz + w,
             color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f
         )
 
@@ -399,6 +403,40 @@ object Render3D {
             increase = increase,
             phase = phase
         )
+    }
+
+    /**
+     * - Renders a tracer
+     * @param ctx The [Context] instance
+     * @param x
+     * @param y
+     * @param z
+     * @param color Color instance
+     * @param phase Whether to render through walls or not (`true` = yes)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     */
+    @JvmOverloads
+    fun renderTracer(
+        ctx: Context,
+        x: Double, y: Double, z: Double,
+        color: Color,
+        phase: Boolean = true,
+        translate: Boolean = true
+    ) {
+        if (!ctx.stacksInit) return
+
+        val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
+        val camPos = ctx.camera.pos.negate()
+        val look = ctx.camera.rotation
+
+        val ox = (if (translate) x - camPos.x else x).toFloat()
+        val oy = (if (translate) y - camPos.y else y).toFloat()
+        val oz = (if (translate) z - camPos.z else z).toFloat()
+
+        val consumer = ctx.consumers.getBuffer(layer)
+        consumer.vertex(look.x, look.y, look.z).color(color.red, color.green, color.blue, color.alpha).normal(0f, 1f, 0f)
+        consumer.vertex(ox, oy, oz).color(color.red, color.green, color.blue, color.alpha).normal(0f, 1f, 0f)
     }
 
     /**
