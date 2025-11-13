@@ -103,15 +103,19 @@ object Render3D {
         var cx = x
         var cz = z
         var cy = y
+        var w = width
+        var h = height
         val layer = if (phase) RendererLayers.TRIANGLE_STRIP_ESP else RendererLayers.TRIANGLE_STRIP
         val camPos = ctx.camera.pos.negate()
 
         // Add slightly more to the coords if phase is false
         //  since the block will take over it, and it won't render properly (if it's in a block)
         if (!phase) {
-            cx += 0.003
-            cy += 0.003
-            cz += 0.003
+            cx -= 0.003
+            cy -= 0.003
+            cz -= 0.003
+            w += 0.006
+            h += 0.006
         }
 
         if (translate) {
@@ -123,7 +127,7 @@ object Render3D {
             ctx.stacks,
             ctx.consumers.getBuffer(layer),
             cx, cy, cz,
-            cx + width, cy + height + 0.003, cz + width,
+            cx + w, cy + h, cz + w,
             color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f
         )
 
