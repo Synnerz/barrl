@@ -33,6 +33,7 @@ object BeaconBeamRenderer {
         val wavePhase = MathHelper.fractionalPart(fixedTime * 0.2f - MathHelper.floor(fixedTime * 0.1f).toFloat())
         val animationStep = -1f + wavePhase
         var renderYOffset = height.toFloat() * heightScale * (0.5f / innerRadius) + animationStep
+        val alpha = color ushr 24
 
         matrices.push()
         matrices.translate(0.5, 0.0, 0.5)
@@ -42,7 +43,7 @@ object BeaconBeamRenderer {
 
         renderBeamLayer(
             matrices,
-            vertexConsumer.getBuffer(opaqueLayer),
+            vertexConsumer.getBuffer(if (alpha == 255) opaqueLayer else translucentLayer),
             color,
             0f,
             innerRadius,
@@ -63,7 +64,7 @@ object BeaconBeamRenderer {
         renderBeamLayer(
             matrices,
             vertexConsumer.getBuffer(translucentLayer),
-            ColorHelper.withAlpha(32, color),
+            ((alpha / 4) shl 24) or (color and 0x00FFFFFF),
             -outerRadius,
             -outerRadius,
             outerRadius,
