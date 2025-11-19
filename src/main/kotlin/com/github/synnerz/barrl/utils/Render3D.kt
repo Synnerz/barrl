@@ -35,6 +35,7 @@ object Render3D {
         ox: Double, oy: Double, oz: Double,
         color: Color, phase: Boolean = false
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
         val consumers = ctx.consumers
@@ -96,6 +97,7 @@ object Render3D {
         phase: Boolean = false,
         translate: Boolean = true
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
         var cx = x
@@ -146,6 +148,7 @@ object Render3D {
         color: Color, phase: Boolean = false,
         lineWidth: Double = 1.0
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
         val consumers = ctx.consumers
@@ -205,6 +208,7 @@ object Render3D {
         translate: Boolean = true,
         lineWidth: Double = 1.0
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
         val layer = RendererLayers.lines(lineWidth, phase)
@@ -333,6 +337,7 @@ object Render3D {
         phase: Boolean = false,
         translate: Boolean = true
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
         val world = minecraft.world ?: return
@@ -382,6 +387,7 @@ object Render3D {
         increase: Boolean = false,
         phase: Boolean = false
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
         val pos = minecraft.player ?: return
