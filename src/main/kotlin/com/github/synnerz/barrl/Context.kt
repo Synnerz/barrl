@@ -213,6 +213,26 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
     ) = Render3D.renderWaypoint(this, x, y, z, color, title, increase, phase)
 
     /**
+     * - Renders a tracer
+     * @param x
+     * @param y
+     * @param z
+     * @param color Color instance
+     * @param phase Whether to render through walls or not (`true` = yes)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     * @param lineWidth The line width of the tracer
+     */
+    @JvmOverloads
+    fun renderTracer(
+        x: Double, y: Double, z: Double,
+        color: Color,
+        phase: Boolean = true,
+        translate: Boolean = true,
+        lineWidth: Double = 1.0
+    ) = Render3D.renderTracer(this, x, y, z, color, phase, translate, lineWidth)
+
+    /**
      * - Adds a new vertex to the current [consumer]
      * @param consumer The [VertexConsumer] instance
      * @param x

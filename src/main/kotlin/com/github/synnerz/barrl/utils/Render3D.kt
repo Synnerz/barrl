@@ -7,6 +7,7 @@ import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.VertexConsumer
 import net.minecraft.client.render.VertexRendering
 import net.minecraft.util.shape.VoxelShape
+import org.joml.Vector3f
 import java.awt.Color
 import kotlin.math.sqrt
 
@@ -432,21 +433,40 @@ object Render3D {
         x: Double, y: Double, z: Double,
         color: Color,
         phase: Boolean = true,
-        translate: Boolean = true
+        translate: Boolean = true,
+        lineWidth: Double = 1.0
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
-        val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
-        val camPos = ctx.camera.pos.negate()
-        val look = ctx.camera.rotation
+        val layer = RendererLayers.lines(lineWidth, phase)
+        val camPos = ctx.camera.pos
+        val qrot = ctx.camera.rotation
 
-        val ox = (if (translate) x - camPos.x else x).toFloat()
-        val oy = (if (translate) y - camPos.y else y).toFloat()
-        val oz = (if (translate) z - camPos.z else z).toFloat()
+        if (translate) {
+            ctx.stacks.push()
+            ctx.stacks.translate(-camPos.x, -camPos.y, -camPos.z)
+        }
+
+        val px = x.toFloat()
+        val py = y.toFloat()
+        val pz = z.toFloat()
+
+        val look = qrot.transform(Vector3f(0f, 0f, -1f))
+        val lx = look.x + camPos.x.toFloat()
+        val ly = look.y + camPos.y.toFloat()
+        val lz = look.z + camPos.z.toFloat()
+
+        val ox = px + lx
+        val oy = py + ly
+        val oz = pz + lz
 
         val consumer = ctx.consumers.getBuffer(layer)
-        consumer.vertex(look.x, look.y, look.z).color(color.red, color.green, color.blue, color.alpha).normal(0f, 1f, 0f)
-        consumer.vertex(ox, oy, oz).color(color.red, color.green, color.blue, color.alpha).normal(0f, 1f, 0f)
+        val mat = ctx.stacks.peek()
+        consumer.vertex(mat, px, py, pz).color(color.red, color.green, color.blue, color.alpha).normal(lx, ly, lz)
+        consumer.vertex(mat, ox, oy, oz).color(color.red, color.green, color.blue, color.alpha).normal(lx, ly, lz)
+
+        if (translate) ctx.stacks.pop()
     }
 
     /**
