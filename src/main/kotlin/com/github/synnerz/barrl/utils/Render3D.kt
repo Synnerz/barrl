@@ -143,13 +143,14 @@ object Render3D {
         ctx: Context,
         shape: VoxelShape,
         ox: Double, oy: Double, oz: Double,
-        color: Color, phase: Boolean = false
+        color: Color, phase: Boolean = false,
+        lineWidth: Double = 1.0
     ) {
         if (!ctx.stacksInit) return
 
         val consumers = ctx.consumers
         val matrices = ctx.stacks
-        val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
+        val layer = RendererLayers.lines(lineWidth, phase)
 
         VertexRendering.drawOutline(
             matrices,
@@ -177,8 +178,9 @@ object Render3D {
         x: Double, y: Double, z: Double,
         color: Color,
         phase: Boolean = false,
-        translate: Boolean = true
-    ) = renderBox(ctx, x, y, z, 1.0, 1.0, color, phase, translate)
+        translate: Boolean = true,
+        lineWidth: Double = 1.0
+    ) = renderBox(ctx, x, y, z, 1.0, 1.0, color, phase, translate, lineWidth)
 
     /**
      * - Renders a box that is the size of the specified width/height
@@ -200,11 +202,12 @@ object Render3D {
         width: Double, height: Double,
         color: Color,
         phase: Boolean = false,
-        translate: Boolean = true
+        translate: Boolean = true,
+        lineWidth: Double = 1.0
     ) {
         if (!ctx.stacksInit) return
 
-        val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
+        val layer = RendererLayers.lines(lineWidth, phase)
         val camPos = ctx.camera.pos.negate()
 
         if (translate) {

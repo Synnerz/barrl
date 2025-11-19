@@ -96,14 +96,16 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
      * @param oz The Z offset
      * @param color The color
      * @param phase Whether to render through walls or not (`false` = no)
+     * @param lineWidth The line width of the box
      */
     @JvmOverloads
     fun renderBoxShape(
         shape: VoxelShape,
         ox: Double, oy: Double, oz: Double,
         color: Color = Color.WHITE,
-        phase: Boolean = false
-    ) = Render3D.renderBoxShape(this, shape, ox, oy, oz, color, phase)
+        phase: Boolean = false,
+        lineWidth: Double = 1.0
+    ) = Render3D.renderBoxShape(this, shape, ox, oy, oz, color, phase, lineWidth)
 
     /**
      * - Renders a 1x1 box
@@ -114,14 +116,16 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
      * @param phase Whether to render through walls or not (`false` = no)
      * @param translate Whether to translate the position by the camera entity,
      *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     * @param lineWidth The line width of the box
      */
     @JvmOverloads
     fun renderBox(
         x: Double, y: Double, z: Double,
         color: Color = Color.WHITE,
         phase: Boolean = false,
-        translate: Boolean = true
-    ) = Render3D.renderBox(this, x, y, z, color, phase, translate)
+        translate: Boolean = true,
+        lineWidth: Double = 1.0,
+    ) = Render3D.renderBox(this, x, y, z, color, phase, translate, lineWidth)
 
     /**
      * - Renders a box that is the size of the specified width/height
@@ -134,6 +138,7 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
      * @param phase Whether to render through walls or not (`false` = no)
      * @param translate Whether to translate the position by the camera entity,
      *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     * @param lineWidth The line width of the box
      */
     @JvmOverloads
     fun renderBox(
@@ -141,8 +146,9 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
         width: Double, height: Double,
         color: Color,
         phase: Boolean = false,
-        translate: Boolean = true
-    ) = Render3D.renderBox(this, x, y, z, width, height, color, phase, translate)
+        translate: Boolean = true,
+        lineWidth: Double = 1.0
+    ) = Render3D.renderBox(this, x, y, z, width, height, color, phase, translate, lineWidth)
 
     /**
      * - Renders a string
