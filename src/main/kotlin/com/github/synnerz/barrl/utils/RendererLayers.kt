@@ -8,28 +8,25 @@ import java.util.*
 
 // From devonian https://github.com/Synnerz/devonian/blob/main/src/main/kotlin/com/github/synnerz/devonian/utils/render/DPipelines.kt
 object RendererLayers {
-    private val lineWidths = HashMap<String, RenderLayer.MultiPhase>()
+    private data class RenderLayerKey(val lineWidth: Double, val esp: Boolean)
+    private val cachedLineLayers = mutableMapOf<RenderLayerKey, RenderLayer.MultiPhase>()
 
-    fun lines(lineWidth: Double = 1.0, esp: Boolean = false): RenderLayer.MultiPhase {
-        if (lineWidths.contains("lines$lineWidth")) return lineWidths["lines$lineWidth"]!!
-
-        val key = if (esp) "lines_esp" else "lines"
-        val lw = RenderPhase.LineWidth(OptionalDouble.of(lineWidth))
-        val layer = RenderLayer.of(
-            "barrl/$key",
-            1536,
-            false,
-            true,
-            if (esp) RendererPipelines.LINES_ESP else RendererPipelines.LINES,
-            RenderLayer.MultiPhaseParameters
-                .builder()
-                .lineWidth(lw)
-                .build(false)
-        )
-
-        lineWidths["$key$lineWidth"] = layer
-
-        return layer
+    fun lines(lineWidth: Double = 1.0, phase: Boolean = false): RenderLayer.MultiPhase {
+        return cachedLineLayers.getOrPut(RenderLayerKey(lineWidth, phase)) {
+            val name = if (phase) "lines_esp" else "lines"
+            val lw = RenderPhase.LineWidth(OptionalDouble.of(lineWidth))
+            RenderLayer.of(
+                "barrl/$name",
+                1536,
+                false,
+                true,
+                if (phase) RendererPipelines.LINES_ESP else RendererPipelines.LINES,
+                RenderLayer.MultiPhaseParameters
+                    .builder()
+                    .lineWidth(lw)
+                    .build(false)
+            )
+        }
     }
 
     val TRIANGLE_STRIP = RenderLayer.of(
