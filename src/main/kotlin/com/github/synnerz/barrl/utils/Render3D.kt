@@ -73,7 +73,7 @@ object Render3D {
         color: Color,
         phase: Boolean = false,
         translate: Boolean = true
-    ) = renderFilledBox(ctx,  x, y, z, 1.0, 1.0, color, phase, translate)
+    ) = renderFilledBox(ctx, x, y, z, 1.0, 1.0, color, phase, translate)
 
     /**
      * - Renders a filled box that is the size of the specified width/height
@@ -392,17 +392,18 @@ object Render3D {
 
         val pos = minecraft.player ?: return
         val dx = x - pos.x
-        val dy = y + 5 - pos.y
+        val dy = y + 2 - pos.y
         val dz = z - pos.z
 
-        renderFilledBox(ctx, x, y, z, Color(color.red, color.green, color.blue, 80), phase)
+        renderFilledBox(ctx, x, y, z, Color(color.red, color.green, color.blue, color.alpha / 3), phase)
         renderBox(ctx, x, y, z, color, phase)
-        renderBeam(ctx, x, y, z, color, phase)
-        renderString(
+        renderBeam(ctx, x, y + 1, z, color, phase)
+        val dist = sqrt(dx * dx + dy * dy + dz * dz)
+        if (dist > 10.0) renderString(
             ctx,
-            title ?: "%.2fm".format(sqrt(dx * dx + dy * dy + dz * dz)),
+            title ?: "%.2fm".format(dist),
             x + 0.5,
-            y + 5.0,
+            y + 2.0,
             z + 0.5,
             backgroundBox = true,
             increase = increase,
