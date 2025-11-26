@@ -3,30 +3,30 @@ package com.github.synnerz.barrl.utils
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.RenderPhase
 import net.minecraft.client.render.block.entity.BeaconBlockEntityRenderer
+import java.util.*
 
 // From devonian https://github.com/Synnerz/devonian/blob/main/src/main/kotlin/com/github/synnerz/devonian/utils/render/DPipelines.kt
 object RendererLayers {
-    val LINES = RenderLayer.of(
-        "barrl/lines",
-        1536,
-        false,
-        true,
-        RendererPipelines.LINES,
-        RenderLayer.MultiPhaseParameters
-            .builder()
-            .build(false)
-    )
+    private data class RenderLayerKey(val lineWidth: Double, val esp: Boolean)
+    private val cachedLineLayers = mutableMapOf<RenderLayerKey, RenderLayer.MultiPhase>()
 
-    val LINES_ESP = RenderLayer.of(
-        "barrl/lines_esp",
-        1536,
-        false,
-        true,
-        RendererPipelines.LINES_ESP,
-        RenderLayer.MultiPhaseParameters
-            .builder()
-            .build(false)
-    )
+    fun lines(lineWidth: Double = 1.0, phase: Boolean = false): RenderLayer.MultiPhase {
+        return cachedLineLayers.getOrPut(RenderLayerKey(lineWidth, phase)) {
+            val name = if (phase) "lines_esp" else "lines"
+            val lw = RenderPhase.LineWidth(OptionalDouble.of(lineWidth))
+            RenderLayer.of(
+                "barrl/$name",
+                1536,
+                false,
+                true,
+                if (phase) RendererPipelines.LINES_ESP else RendererPipelines.LINES,
+                RenderLayer.MultiPhaseParameters
+                    .builder()
+                    .lineWidth(lw)
+                    .build(false)
+            )
+        }
+    }
 
     val TRIANGLE_STRIP = RenderLayer.of(
         "barrl/triangle_strip",

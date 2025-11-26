@@ -7,6 +7,7 @@ import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.VertexConsumer
 import net.minecraft.client.render.VertexRendering
 import net.minecraft.util.shape.VoxelShape
+import org.joml.Vector3f
 import java.awt.Color
 import kotlin.math.sqrt
 
@@ -23,8 +24,8 @@ object Render3D {
      * @param ctx The Context instance
      * @param shape The VoxelShape instance to render
      * @param ox The x offset
-     * @param oy The Y offset
-     * @param oz The Z offset
+     * @param oy The y offset
+     * @param oz The z offset
      * @param color The color
      * @param phase Whether to render through walls or not (`false` = no)
      */
@@ -35,6 +36,7 @@ object Render3D {
         ox: Double, oy: Double, oz: Double,
         color: Color, phase: Boolean = false
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
         val consumers = ctx.consumers
@@ -72,7 +74,7 @@ object Render3D {
         color: Color,
         phase: Boolean = false,
         translate: Boolean = true
-    ) = renderFilledBox(ctx,  x, y, z, 1.0, 1.0, color, phase, translate)
+    ) = renderFilledBox(ctx, x, y, z, 1.0, 1.0, color, phase, translate)
 
     /**
      * - Renders a filled box that is the size of the specified width/height
@@ -96,20 +98,25 @@ object Render3D {
         phase: Boolean = false,
         translate: Boolean = true
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
         var cx = x
         var cz = z
         var cy = y
+        var w = width
+        var h = height
         val layer = if (phase) RendererLayers.TRIANGLE_STRIP_ESP else RendererLayers.TRIANGLE_STRIP
         val camPos = ctx.camera.pos.negate()
 
         // Add slightly more to the coords if phase is false
         //  since the block will take over it, and it won't render properly (if it's in a block)
         if (!phase) {
-            cx += 0.003
-            cy += 0.003
-            cz += 0.003
+            cx -= 0.003
+            cy -= 0.003
+            cz -= 0.003
+            w += 0.006
+            h += 0.006
         }
 
         if (translate) {
@@ -121,7 +128,7 @@ object Render3D {
             ctx.stacks,
             ctx.consumers.getBuffer(layer),
             cx, cy, cz,
-            cx + width, cy + height + 0.003, cz + width,
+            cx + w, cy + h, cz + w,
             color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f
         )
 
@@ -133,8 +140,8 @@ object Render3D {
      * @param ctx The Context instance
      * @param shape The VoxelShape instance to render
      * @param ox The x offset
-     * @param oy The Y offset
-     * @param oz The Z offset
+     * @param oy The y offset
+     * @param oz The z offset
      * @param color The color
      * @param phase Whether to render through walls or not (`false` = no)
      */
@@ -143,13 +150,15 @@ object Render3D {
         ctx: Context,
         shape: VoxelShape,
         ox: Double, oy: Double, oz: Double,
-        color: Color, phase: Boolean = false
+        color: Color, phase: Boolean = false,
+        lineWidth: Double = 1.0
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
         val consumers = ctx.consumers
         val matrices = ctx.stacks
-        val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
+        val layer = RendererLayers.lines(lineWidth, phase)
 
         VertexRendering.drawOutline(
             matrices,
@@ -177,8 +186,9 @@ object Render3D {
         x: Double, y: Double, z: Double,
         color: Color,
         phase: Boolean = false,
-        translate: Boolean = true
-    ) = renderBox(ctx, x, y, z, 1.0, 1.0, color, phase, translate)
+        translate: Boolean = true,
+        lineWidth: Double = 1.0
+    ) = renderBox(ctx, x, y, z, 1.0, 1.0, color, phase, translate, lineWidth)
 
     /**
      * - Renders a box that is the size of the specified width/height
@@ -200,11 +210,13 @@ object Render3D {
         width: Double, height: Double,
         color: Color,
         phase: Boolean = false,
-        translate: Boolean = true
+        translate: Boolean = true,
+        lineWidth: Double = 1.0
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
-        val layer = if (phase) RendererLayers.LINES_ESP else RendererLayers.LINES
+        val layer = RendererLayers.lines(lineWidth, phase)
         val camPos = ctx.camera.pos.negate()
 
         if (translate) {
@@ -330,6 +342,7 @@ object Render3D {
         phase: Boolean = false,
         translate: Boolean = true
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
         val world = minecraft.world ?: return
@@ -379,26 +392,81 @@ object Render3D {
         increase: Boolean = false,
         phase: Boolean = false
     ) {
+        if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
         val pos = minecraft.player ?: return
         val dx = x - pos.x
-        val dy = y + 5 - pos.y
+        val dy = y + 2 - pos.y
         val dz = z - pos.z
 
-        renderFilledBox(ctx, x, y, z, Color(color.red, color.green, color.blue, 80), phase)
+        renderFilledBox(ctx, x, y, z, Color(color.red, color.green, color.blue, color.alpha / 3), phase)
         renderBox(ctx, x, y, z, color, phase)
-        renderBeam(ctx, x, y, z, color, phase)
-        renderString(
+        renderBeam(ctx, x, y + 1, z, color, phase)
+        val dist = sqrt(dx * dx + dy * dy + dz * dz)
+        if (dist > 10.0) renderString(
             ctx,
-            title ?: "%.2fm".format(sqrt(dx * dx + dy * dy + dz * dz)),
+            title ?: "%.2fm".format(dist),
             x + 0.5,
-            y + 5.0,
+            y + 2.0,
             z + 0.5,
             backgroundBox = true,
             increase = increase,
             phase = phase
         )
+    }
+
+    /**
+     * - Renders a tracer
+     * @param ctx The [Context] instance
+     * @param x
+     * @param y
+     * @param z
+     * @param color Color instance
+     * @param phase Whether to render through walls or not (`true` = yes)
+     * @param translate Whether to translate the position by the camera entity,
+     *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     */
+    @JvmOverloads
+    fun renderTracer(
+        ctx: Context,
+        x: Double, y: Double, z: Double,
+        color: Color,
+        phase: Boolean = true,
+        translate: Boolean = true,
+        lineWidth: Double = 1.0
+    ) {
+        if (color.alpha == 0) return
+        if (!ctx.stacksInit) return
+
+        val layer = RendererLayers.lines(lineWidth, phase)
+        val camPos = ctx.camera.pos
+        val qrot = ctx.camera.rotation
+
+        if (translate) {
+            ctx.stacks.push()
+            ctx.stacks.translate(-camPos.x, -camPos.y, -camPos.z)
+        }
+
+        val px = x.toFloat()
+        val py = y.toFloat()
+        val pz = z.toFloat()
+
+        val look = qrot.transform(Vector3f(0f, 0f, -1f))
+        val lx = look.x + camPos.x.toFloat()
+        val ly = look.y + camPos.y.toFloat()
+        val lz = look.z + camPos.z.toFloat()
+
+        val ox = px + lx
+        val oy = py + ly
+        val oz = pz + lz
+
+        val consumer = ctx.consumers.getBuffer(layer)
+        val mat = ctx.stacks.peek()
+        consumer.vertex(mat, px, py, pz).color(color.red, color.green, color.blue, color.alpha).normal(lx, ly, lz)
+        consumer.vertex(mat, ox, oy, oz).color(color.red, color.green, color.blue, color.alpha).normal(lx, ly, lz)
+
+        if (translate) ctx.stacks.pop()
     }
 
     /**
