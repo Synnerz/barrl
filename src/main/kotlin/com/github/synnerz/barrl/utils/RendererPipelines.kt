@@ -27,7 +27,7 @@ object RendererPipelines {
 
     val TRIANGLE_STRIP = RenderPipeline.builder(RenderPipelines.POSITION_COLOR_SNIPPET)
         .withLocation("barrl/triangle_strip")
-        .withCull(false)
+        .withCull(true)
         .withVertexFormat(VertexFormats.POSITION_COLOR, DrawMode.TRIANGLE_STRIP)
         .withDepthWrite(true)
         .withDepthTestFunction(DepthTestFunction.LEQUAL_DEPTH_TEST)
