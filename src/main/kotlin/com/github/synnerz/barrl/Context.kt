@@ -8,6 +8,7 @@ import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.shape.VoxelShape
 import java.awt.Color
+import kotlin.Double
 
 class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
     lateinit var stacks: MatrixStack
@@ -78,6 +79,7 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
      * @param phase Whether to render through walls or not (`false` = no)
      * @param translate Whether to translate the position by the camera entity,
      *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     * @param widthZ
      */
     @JvmOverloads
     fun renderFilledBox(
@@ -85,8 +87,9 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
         width: Double, height: Double,
         color: Color,
         phase: Boolean = false,
-        translate: Boolean = true
-    ) = Render3D.renderFilledBox(this, x, y, z, width, height, color, phase, translate)
+        translate: Boolean = true,
+        widthZ: Double = width,
+    ) = Render3D.renderFilledBox(this, x, y, z, width, height, color, phase, translate, widthZ)
 
     /**
      * - Renders a box at the given shape
@@ -139,6 +142,7 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
      * @param translate Whether to translate the position by the camera entity,
      *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
      * @param lineWidth The line width of the box
+     * @param widthZ
      */
     @JvmOverloads
     fun renderBox(
@@ -147,8 +151,9 @@ class Context @JvmOverloads constructor(val isImmediate: Boolean = false) {
         color: Color,
         phase: Boolean = false,
         translate: Boolean = true,
-        lineWidth: Double = 1.0
-    ) = Render3D.renderBox(this, x, y, z, width, height, color, phase, translate, lineWidth)
+        lineWidth: Double = 1.0,
+        widthZ: Double = width,
+    ) = Render3D.renderBox(this, x, y, z, width, height, color, phase, translate, lineWidth, widthZ)
 
     /**
      * - Renders a string

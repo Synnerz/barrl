@@ -88,6 +88,7 @@ object Render3D {
      * @param phase Whether to render through walls or not (`false` = no)
      * @param translate Whether to translate the position by the camera entity,
      *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     * @param widthZ
      */
     @JvmOverloads
     fun renderFilledBox(
@@ -96,7 +97,8 @@ object Render3D {
         width: Double, height: Double,
         color: Color,
         phase: Boolean = false,
-        translate: Boolean = true
+        translate: Boolean = true,
+        widthZ: Double = width,
     ) {
         if (color.alpha == 0) return
         if (!ctx.stacksInit) return
@@ -104,7 +106,8 @@ object Render3D {
         var cx = x
         var cz = z
         var cy = y
-        var w = width
+        var wx = width
+        var wz = widthZ
         var h = height
         val layer = if (phase) RendererLayers.TRIANGLE_STRIP_ESP else RendererLayers.TRIANGLE_STRIP
         val camPos = ctx.camera.pos.negate()
@@ -115,7 +118,8 @@ object Render3D {
             cx -= 0.003
             cy -= 0.003
             cz -= 0.003
-            w += 0.006
+            wx += 0.006
+            wz += 0.006
             h += 0.006
         }
 
@@ -128,7 +132,7 @@ object Render3D {
             ctx.stacks,
             ctx.consumers.getBuffer(layer),
             cx, cy, cz,
-            cx + w, cy + h, cz + w,
+            cx + wx, cy + h, cz + wz,
             color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f
         )
 
@@ -202,6 +206,7 @@ object Render3D {
      * @param phase Whether to render through walls or not (`false` = no)
      * @param translate Whether to translate the position by the camera entity,
      *   this allows it to look in the correct place in some instances (`true` by default since it's often needed)
+     * @param widthZ
      */
     @JvmOverloads
     fun renderBox(
@@ -211,7 +216,8 @@ object Render3D {
         color: Color,
         phase: Boolean = false,
         translate: Boolean = true,
-        lineWidth: Double = 1.0
+        lineWidth: Double = 1.0,
+        widthZ: Double = width,
     ) {
         if (color.alpha == 0) return
         if (!ctx.stacksInit) return
@@ -228,7 +234,7 @@ object Render3D {
             ctx.stacks.peek(),
             ctx.consumers.getBuffer(layer),
             x, y, z,
-            x + width, y + height, z + width,
+            x + width, y + height, z + widthZ,
             color.red / 255f, color.green / 255f, color.blue / 255f, color.alpha / 255f
         )
 
