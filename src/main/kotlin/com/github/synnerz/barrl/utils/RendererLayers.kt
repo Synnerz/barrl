@@ -10,9 +10,7 @@ object RendererLayers {
     private data class RenderLayerKey(val lineWidth: Double, val esp: Boolean)
     private val cachedLineLayers = mutableMapOf<RenderLayerKey, RenderLayer.MultiPhase>()
 
-    fun lines(lineWidth: Double = 1.0, phase: Boolean = false): RenderLayer.MultiPhase {
-        return cachedLineLayers.getOrPut(RenderLayerKey(lineWidth, phase)) {
-            val name = if (phase) "lines_esp_$lineWidth" else "lines_$lineWidth"
+        val lineWidth = ceil(lineWidth * 10.0) / 10.0
             val lw = RenderPhase.LineWidth(OptionalDouble.of(lineWidth))
             RenderLayer.of(
                 "barrl/$name",
