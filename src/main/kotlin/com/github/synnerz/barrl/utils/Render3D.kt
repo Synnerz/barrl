@@ -41,7 +41,13 @@ object Render3D {
 
         val consumers = ctx.consumers
         val matrices = ctx.stacks
-        val layer = if (phase) RendererLayers.TRIANGLE_STRIP_ESP else RendererLayers.TRIANGLE_STRIP
+        val layer = if (phase) {
+            if (color.alpha == 255) RendererLayers.TRIANGLE_STRIP_OPAQUE_ESP
+            else RendererLayers.TRIANGLE_STRIP_TRANSLUCENT_ESP
+        } else {
+            if (color.alpha == 255) RendererLayers.TRIANGLE_STRIP_OPAQUE
+            else RendererLayers.TRIANGLE_STRIP_TRANSLUCENT
+        }
 
         // TODO: make this more efficient later on
         //  (this does way too many calls but shouldn't matter much as of right now)
@@ -109,7 +115,13 @@ object Render3D {
         var wx = width
         var wz = widthZ
         var h = height
-        val layer = if (phase) RendererLayers.TRIANGLE_STRIP_ESP else RendererLayers.TRIANGLE_STRIP
+        val layer = if (phase) {
+            if (color.alpha == 255) RendererLayers.TRIANGLE_STRIP_OPAQUE_ESP
+            else RendererLayers.TRIANGLE_STRIP_TRANSLUCENT_ESP
+        } else {
+            if (color.alpha == 255) RendererLayers.TRIANGLE_STRIP_OPAQUE
+            else RendererLayers.TRIANGLE_STRIP_TRANSLUCENT
+        }
         val camPos = ctx.camera.pos.negate()
 
         // Add slightly more to the coords if phase is false
@@ -162,7 +174,7 @@ object Render3D {
 
         val consumers = ctx.consumers
         val matrices = ctx.stacks
-        val layer = RendererLayers.lines(lineWidth, phase)
+        val layer = RendererLayers.lines(lineWidth, phase, color.alpha == 255)
 
         VertexRendering.drawOutline(
             matrices,
@@ -222,7 +234,7 @@ object Render3D {
         if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
-        val layer = RendererLayers.lines(lineWidth, phase)
+        val layer = RendererLayers.lines(lineWidth, phase, color.alpha == 255)
         val camPos = ctx.camera.pos.negate()
 
         if (translate) {
@@ -445,7 +457,7 @@ object Render3D {
         if (color.alpha == 0) return
         if (!ctx.stacksInit) return
 
-        val layer = RendererLayers.lines(lineWidth, phase)
+        val layer = RendererLayers.lines(lineWidth, phase, color.alpha == 255)
         val camPos = ctx.camera.pos
         val qrot = ctx.camera.rotation
 
