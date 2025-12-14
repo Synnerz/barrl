@@ -6,11 +6,14 @@ import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.vertex.VertexFormat.DrawMode
 import net.minecraft.client.gl.RenderPipelines
 import net.minecraft.client.render.VertexFormats
+import java.util.Collections
+import java.util.IdentityHashMap
 
 // From devonian https://github.com/Synnerz/devonian/blob/main/src/main/kotlin/com/github/synnerz/devonian/utils/render/DLayers.kt
 object RendererPipelines {
-    val LINES = RenderPipeline.builder(RenderPipelines.RENDERTYPE_LINES_SNIPPET)
-        .withLocation("barrl/lines")
+    @JvmStatic
+    val ALWAYS_PASS_RENDER_PIPELINES = Collections.newSetFromMap<RenderPipeline>(IdentityHashMap())
+
         .withCull(false)
         .withBlend(BlendFunction.TRANSLUCENT)
         .withDepthWrite(true)
@@ -65,4 +68,8 @@ object RendererPipelines {
         .withBlend(BlendFunction.TRANSLUCENT)
         .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
         .build()
+
+    fun RenderPipeline.withDepthTestAlways() = apply {
+        ALWAYS_PASS_RENDER_PIPELINES.add(this)
+    }
 }
