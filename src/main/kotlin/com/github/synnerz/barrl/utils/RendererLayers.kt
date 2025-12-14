@@ -12,7 +12,7 @@ object RendererLayers {
 
     fun lines(lineWidth: Double = 1.0, phase: Boolean = false): RenderLayer.MultiPhase {
         return cachedLineLayers.getOrPut(RenderLayerKey(lineWidth, phase)) {
-            val name = if (phase) "lines_esp" else "lines"
+            val name = if (phase) "lines_esp_$lineWidth" else "lines_$lineWidth"
             val lw = RenderPhase.LineWidth(OptionalDouble.of(lineWidth))
             RenderLayer.of(
                 "barrl/$name",
