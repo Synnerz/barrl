@@ -80,6 +80,50 @@ object RendererLayers {
             .build(false)
     )
 
+    val QUADS_OPAQUE = RenderLayer.of(
+        "barrl/quads_opaque",
+        1536,
+        false,
+        false,
+        RendererPipelines.QUADS_OPAQUE,
+        RenderLayer.MultiPhaseParameters
+            .builder()
+            .build(false)
+    )
+
+    val QUADS_OPAQUE_ESP = RenderLayer.of(
+        "barrl/quads_opaque_esp",
+        1536,
+        false,
+        false,
+        RendererPipelines.QUADS_OPAQUE_ESP,
+        RenderLayer.MultiPhaseParameters
+            .builder()
+            .build(false)
+    )
+
+    val QUADS_TRANSLUCENT = RenderLayer.of(
+        "barrl/quads_translucent",
+        1536,
+        false,
+        true,
+        RendererPipelines.QUADS_TRANSLUCENT,
+        RenderLayer.MultiPhaseParameters
+            .builder()
+            .build(false)
+    )
+
+    val QUADS_TRANSLUCENT_ESP = RenderLayer.of(
+        "barrl/quads_translucent_esp",
+        1536,
+        false,
+        true,
+        RendererPipelines.QUADS_TRANSLUCENT_ESP,
+        RenderLayer.MultiPhaseParameters
+            .builder()
+            .build(false)
+    )
+
     val BEACON_BEAM_OPAQUE = RenderLayer.of(
         "barrl/beacon_beam_opaque",
         1536,
